@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RetentionIQ — Customer Retention &amp; Churn Analytics Dashboard. Premium analytics layout for Future Interns Task 2 (2026).">
+  <title>RetentionIQ — Customer Retention &amp; Churn Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/premium.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     FLOATING FROSTED-GLASS NAVIGATION
+     ═══════════════════════════════════════════════════ -->
+<nav class="floaty-nav" id="floaty-nav">
+
+  <!-- Brand Left -->
+  <div class="nav-brand">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 12 C3 7 7 3 12 3 S21 7 21 12 17 21 12 21"/>
+        <path d="M12 8 L12 12 L16 14"/>
+      </svg>
+    </div>
+    <div class="nav-brand-text">
+      <div class="nav-brand-name">RetentionIQ</div>
+      <div class="nav-brand-sub">Customer Intelligence Platform</div>
+    </div>
+  </div>
+
+  <!-- Nav Links Center -->
+  <div class="nav-links">
+    <button class="nav-link-item active" onclick="scrollToSection('section-overview')">Overview</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-drivers')">Drivers</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-segments')">Segments</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-cohorts')">Cohorts</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-predictions')">Predictions</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-actions')">Actions</button>
+    <button class="nav-link-item" onclick="scrollToSection('section-portfolio')">Portfolio</button>
+  </div>
+
+  <!-- Profile / Status Right -->
+  <div class="nav-profile">
+    <span class="nav-live-chip">
+      <span class="nav-live-dot"></span>Live Audit
+    </span>
+    <div class="nav-status-text">
+      <div class="nav-status-name">Atharv</div>
+      <div class="nav-status-role">Data Analyst</div>
+      <div class="nav-status-updated" id="nav-last-updated">Loading…</div>
+    </div>
+    <div class="nav-avatar">AP</div>
+  </div>
+
+</nav>
+
+<!-- Legacy header (hidden via premium.css) -->
+<header class="app-header">
+  <div class="brand-section">
+    <div class="brand-logo">RetentionIQ</div>
+    <div class="brand-badge">Customer Intelligence</div>
+  </div>
+  <div class="header-right">
+    <span class="live-indicator"><span class="live-dot"></span>Live Audit</span>
+    <span>IBM Telco · 7,043 Customers</span>
+  </div>
+</header>
+
+<div class="app-container">
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 1: HERO & FINDINGS
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-overview" class="section-anchor">
+    <div class="grid-2-1" style="margin-bottom: 28px;">
+
+      <!-- Hero Insight Area -->
+      <div class="card hero-card" style="display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0;">
+        <div>
+          <div class="card-header" style="margin-bottom:12px;">
+            <div>
+              <h2 class="card-title">Retention Health Audit</h2>
+              <p class="card-subtitle">Primary executive system parameters — IBM Telco · 7,043 Customers</p>
+            </div>
+          </div>
+
+          <div class="health-score-wrap">
+            <div class="health-score-circle" id="hero-health-score">73.5</div>
+            <div class="health-score-info">
+              <div class="health-score-title">Retention Health Score <span class="info-trigger" data-metric="health">ⓘ</span></div>
+              <div class="health-score-desc">Scale 0–100 · 100% minus Churn Rate</div>
+            </div>
+          </div>
+
+          <div class="hero-metric-grid">
+            <div class="hero-metric-card">
+              <div class="hero-metric-val churn" id="hero-churn-rate">26.5%</div>
+              <div class="hero-metric-lbl">Audited Churn <span class="info-trigger" data-metric="churn">ⓘ</span></div>
+            </div>
+            <div class="hero-metric-card">
+              <div class="hero-metric-val warn" id="hero-revenue-risk">$1.02M</div>
+              <div class="hero-metric-lbl">ARR Exposure <span class="info-trigger" data-metric="arr">ⓘ</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="biggest-risk-banner">
+          <span class="biggest-risk-icon">⚠️</span>
+          <div class="biggest-risk-text">
+            Biggest Churn Risk: <strong>Month-to-Month Contracts</strong> (42.7% churn rate, driving 88.5% of total losses).
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Findings Panel -->
+      <div class="card findings-card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Top Churn Warning Signals</h2>
+            <p class="card-subtitle">Identified correlations ranking highest in Cramér's V audit</p>
+          </div>
+        </div>
+        <div class="signal-list" id="plausible-signals">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 2: CHURN DRIVERS (WHY THEY LEAVE)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-drivers" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Churn Root Causes &amp; Behavioral Drivers</h2>
+    <p class="section-subtitle">Detailed breakdown of contractual, payment, lifecycle, and service metrics</p>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 28px;">
+
+    <!-- Driver 1: Contract Type -->
+    <div class="card" style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:center;">
+      <div class="chart-container chart-h-sm">
+        <div class="card-title" style="margin-bottom:12px;">Churn by Contract Type</div>
+        <canvas id="chart-contract"></canvas>
+      </div>
+      <div class="editorial-panel">
+        <div class="editorial-block churn">
+          <div class="editorial-label">Observation</div>
+          <div class="editorial-content" id="contract-obs">—</div>
+        </div>
+        <div class="editorial-block warn">
+          <div class="editorial-label">ARR Impact</div>
+          <div class="editorial-content" id="contract-imp">—</div>
+        </div>
+        <div class="editorial-block retain">
+          <div class="editorial-label">Recommendation</div>
+          <div class="editorial-content" id="contract-rec">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Driver 2: Payment Method -->
+    <div class="card" style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:center;">
+      <div class="chart-container chart-h-sm">
+        <div class="card-title" style="margin-bottom:12px;">Churn by Payment Method</div>
+        <canvas id="chart-payment"></canvas>
+      </div>
+      <div class="editorial-panel">
+        <div class="editorial-block churn">
+          <div class="editorial-label">Observation</div>
+          <div class="editorial-content" id="payment-obs">—</div>
+        </div>
+        <div class="editorial-block warn">
+          <div class="editorial-label">ARR Impact</div>
+          <div class="editorial-content" id="payment-imp">—</div>
+        </div>
+        <div class="editorial-block retain">
+          <div class="editorial-label">Recommendation</div>
+          <div class="editorial-content" id="payment-rec">—</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 28px;">
+
+    <!-- Driver 3: Tenure Danger Zone -->
+    <div class="card" style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:center;">
+      <div class="chart-container chart-h-sm">
+        <div class="card-title" style="margin-bottom:12px;">Churn by Customer Tenure</div>
+        <canvas id="chart-tenure"></canvas>
+      </div>
+      <div class="editorial-panel">
+        <div class="editorial-block churn">
+          <div class="editorial-label">Observation</div>
+          <div class="editorial-content" id="tenure-obs">—</div>
+        </div>
+        <div class="editorial-block warn">
+          <div class="editorial-label">ARR Impact</div>
+          <div class="editorial-content" id="tenure-imp">—</div>
+        </div>
+        <div class="editorial-block retain">
+          <div class="editorial-label">Recommendation</div>
+          <div class="editorial-content" id="tenure-rec">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Driver 4: Internet Service -->
+    <div class="card" style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:center;">
+      <div class="chart-container chart-h-sm">
+        <div class="card-title" style="margin-bottom:12px;">Churn by Internet Service</div>
+        <canvas id="chart-internet"></canvas>
+      </div>
+      <div class="editorial-panel">
+        <div class="editorial-block churn">
+          <div class="editorial-label">Observation</div>
+          <div class="editorial-content" id="internet-obs">—</div>
+        </div>
+        <div class="editorial-block warn">
+          <div class="editorial-label">ARR Impact</div>
+          <div class="editorial-content" id="internet-imp">—</div>
+        </div>
+        <div class="editorial-block retain">
+          <div class="editorial-label">Recommendation</div>
+          <div class="editorial-content" id="internet-rec">—</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 3: CUSTOMER SEGMENTS (WHO IS AFFECTED)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-segments" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Customer Segmentation Matrix</h2>
+    <p class="section-subtitle">Mapping audited base by tenure, spends, priority classes, and risk metrics</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 28px;">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Target Customer Segments Overview</h2>
+        <p class="card-subtitle">8 profiles mapped by data science classification algorithms &bull; <strong style="color: var(--accent);">Click any row for Segment Deep-Dive</strong></p>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="segments-table">
+        <thead>
+          <tr>
+            <th>Segment Profile</th>
+            <th>Audited Base</th>
+            <th>Churn Rate &amp; Distribution</th>
+            <th>Avg Spend</th>
+            <th>Avg Tenure</th>
+            <th>Retention Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 4: COHORTS & LIFETIME (WHEN THEY LEAVE)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-cohorts" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Customer Lifetime &amp; Lifecycle Cohorts</h2>
+    <p class="section-subtitle">Evaluating signup periods retention and survival curves comparison</p>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 28px;">
+
+    <!-- Cohort Heatmap -->
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Quarterly Cohort Retention Heatmap</h2>
+          <p class="card-subtitle">Percentage of customers active in subsequent periods from signup</p>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="heatmap-table" id="cohort-heatmap-table">
+          <!-- Populated dynamically -->
+        </table>
+      </div>
+    </div>
+
+    <!-- Contract Survival Curve -->
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Survival Curves by Contract Type</h2>
+          <p class="card-subtitle">Kaplan-Meier survival probability comparison</p>
+        </div>
+      </div>
+      <div class="chart-container chart-h-md" style="margin-top:12px;">
+        <canvas id="chart-survival-contract"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 5: PREDICTIVE MODELING (MACHINE LEARNING)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-predictions" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Machine Learning Churn Prediction</h2>
+    <p class="section-subtitle">Trained classifiers metrics and key predictive signals</p>
+  </div>
+
+  <div class="grid-1-2" style="margin-bottom: 28px;">
+
+    <!-- Classifier Metrics Card -->
+    <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; margin-bottom: 0;">
+      <div>
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Classifier Model Performance</h2>
+            <p class="card-subtitle">5-fold cross-validation on 23 engineered features</p>
+          </div>
+        </div>
+        <div style="text-align:center; padding:20px 16px; background:var(--surface-2); border-radius:8px; border:1px solid var(--border); margin-bottom:16px;">
+          <div style="font-size:2.6rem; font-weight:800; color:var(--accent); letter-spacing:-0.8px; line-height:1;" id="ml-metrics-auc">84.44%</div>
+          <div style="font-size:0.68rem; color:var(--ink-light); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:6px;">Validation AUC-ROC Score <span class="info-trigger" data-metric="auc">ⓘ</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+          <div style="background:var(--surface-2); border-radius:6px; padding:12px; text-align:center; border:1px solid var(--border);">
+            <div style="font-size:1.15rem; font-weight:700; color:var(--ink);" id="ml-metrics-rf-acc">77.22%</div>
+            <div style="font-size:0.65rem; color:var(--ink-faint); font-weight:600; text-transform:uppercase; margin-top:2px;">Random Forest Acc</div>
+          </div>
+          <div style="background:var(--surface-2); border-radius:6px; padding:12px; text-align:center; border:1px solid var(--border);">
+            <div style="font-size:1.15rem; font-weight:700; color:var(--ink);" id="ml-metrics-lr-acc">74.66%</div>
+            <div style="font-size:0.65rem; color:var(--ink-faint); font-weight:600; text-transform:uppercase; margin-top:2px;">Logistic Reg Acc</div>
+          </div>
+        </div>
+      </div>
+      <div class="editorial-block accent" style="padding-top:4px; padding-bottom:4px; font-size:0.75rem; line-height:1.55;">
+        Logistic Regression achieves the best discrimination threshold at <strong>84.44% AUC</strong>. Random Forest provides the highest overall accuracy at <strong>77.22%</strong>.
+      </div>
+    </div>
+
+    <!-- Charts Split: Feature Importance & ROC Curve -->
+    <div class="grid-2">
+      <div class="card" style="margin-bottom: 0;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Random Forest Feature Importance</h2>
+            <p class="card-subtitle">Explainability layer showing top indicators</p>
+          </div>
+        </div>
+        <div class="chart-container chart-h-md">
+          <canvas id="chart-rf-importance"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 0;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">ROC Model Curve</h2>
+            <p class="card-subtitle">Model TPR vs FPR thresholds discrimination</p>
+          </div>
+        </div>
+        <div class="chart-container chart-h-md">
+          <canvas id="chart-roc"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 6: ACTION PLAN (WHAT TO DO)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-actions" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Strategic Action Plan &amp; ROI Simulator</h2>
+    <p class="section-subtitle">Prioritized interventions and dynamic savings recalculator</p>
+  </div>
+
+  <!-- Live Calculator Banner -->
+  <div class="action-banner" style="flex-wrap: wrap; gap: 16px;">
+    <div class="action-banner-metric">
+      <div class="action-banner-val" id="calc-target-churn">20.97%</div>
+      <div class="action-banner-lbl">Projected Churn Rate <span class="info-trigger" data-metric="target-churn">ⓘ</span></div>
+    </div>
+    <div class="action-banner-arrow">→</div>
+    <div class="action-banner-metric">
+      <div class="action-banner-val" id="calc-monthly-saved">$98,200</div>
+      <div class="action-banner-lbl">Monthly Saved Revenue <span class="info-trigger" data-metric="saved-monthly">ⓘ</span></div>
+    </div>
+    <div class="action-banner-arrow">→</div>
+    <div class="action-banner-metric">
+      <div class="action-banner-val" id="calc-annual-saved">$1.18M</div>
+      <div class="action-banner-lbl">Annual Saved Revenue <span class="info-trigger" data-metric="saved-annual">ⓘ</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 28px;">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Planned Interventions Checklist</h2>
+        <p class="card-subtitle">Select planned interventions to see real-time target metrics simulation</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span style="font-size: 0.78rem; font-weight: 500; color: var(--ink-muted);">Execution Efficiency: <strong id="calc-efficiency-val">100%</strong></span>
+        <input type="range" id="calc-efficiency-slider" min="0" max="100" value="100" style="width: 120px; accent-color: var(--accent);">
+      </div>
+    </div>
+    <div class="action-list" id="recommendations-calculator-list">
+      <!-- Checkboxes populated dynamically -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ROW 7: PIPELINE PORTFOLIO (TECHNICAL AUDIT)
+       ═══════════════════════════════════════════════════ -->
+  <div id="section-portfolio" class="section-anchor section-title-wrap">
+    <h2 class="section-title">Technical Pipeline Portfolio</h2>
+    <p class="section-subtitle">Auditor reference overview and pipeline architecture steps</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 28px;">
+    <div class="card-header">
+      <div>
+        <h2 class="card-title">Data Science Pipeline Methodology</h2>
+        <p class="card-subtitle">8 sequential Python modules executing analytical modeling and database aggregation</p>
+      </div>
+    </div>
+    <div class="pipeline-grid" id="portfolio-pipeline-grid">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Audited Tech Stack</h2>
+          <p class="card-subtitle">Frameworks, libraries, and tools utilized</p>
+        </div>
+      </div>
+      <div class="tech-chips" id="portfolio-tech-chips">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Recruiter Reference Metadata</h2>
+          <p class="card-subtitle">Parameters and processed file coordinates</p>
+        </div>
+      </div>
+      <div style="font-size:0.82rem; line-height:1.7; color:var(--ink-muted);">
+        Audited dataset: <strong>IBM Telco Customer Churn</strong><br>
+        Record size: <strong>7,043 rows &times; 21 columns</strong><br>
+        Processed dataset output location: <code style="font-family:monospace; background:var(--surface-2); padding:2px 6px; border-radius:4px; border:1px solid var(--border);">Data/processed/telco_churn_featured.csv</code><br>
+        Target Variable: <code style="font-family:monospace; background:var(--surface-2); padding:2px 6px; border-radius:4px; border:1px solid var(--border);">Churn (Yes/No)</code>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    RetentionIQ &middot; Customer Retention &amp; Churn Analysis &middot; Future Interns Task 2 (2026)<br>
+    Built with Python, lifelines, scikit-learn, Chart.js &amp; Vanilla HTML/CSS/JS
+  </footer>
+
+</div>
+
+<!-- Drawer & Popovers -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="segment-drawer" id="segment-drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-pretitle">Segment Details</div>
+      <h3 class="drawer-title" id="drawer-segment-name">Segment Profile</h3>
+    </div>
+    <button class="drawer-close" id="drawer-close-btn">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <p class="drawer-desc" id="drawer-segment-desc">—</p>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Segment Statistics</div>
+      <div class="drawer-stats">
+        <div class="drawer-stat">
+          <div class="drawer-stat-val" id="drawer-stat-size">—</div>
+          <div class="drawer-stat-lbl">Size</div>
+        </div>
+        <div class="drawer-stat">
+          <div class="drawer-stat-val" id="drawer-stat-churn">—</div>
+          <div class="drawer-stat-lbl">Churn Rate</div>
+        </div>
+        <div class="drawer-stat">
+          <div class="drawer-stat-val" id="drawer-stat-revenue">—</div>
+          <div class="drawer-stat-lbl">Avg Spend</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Contract Distribution</div>
+      <div class="drawer-bars" id="drawer-contract-dist"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Payment Distribution</div>
+      <div class="drawer-bars" id="drawer-payment-dist"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Internet Service Distribution</div>
+      <div class="drawer-bars" id="drawer-internet-dist"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Demographics</div>
+      <div class="drawer-demographics" id="drawer-demographics-dist"></div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Strategic Action</div>
+      <p class="drawer-desc" style="font-weight: 500; color: var(--ink);" id="drawer-segment-recommendation">—</p>
+    </div>
+  </div>
+</div>
+
+<div class="explain-popover" id="explain-popover">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+    <h4 style="font-size:0.82rem; font-weight:700; color:var(--ink); margin:0;" id="explain-title">Metric Formula</h4>
+    <button class="explain-close-btn" id="explain-close-btn" style="background:none; border:none; color:var(--ink-light); cursor:pointer;">&times;</button>
+  </div>
+  <div style="font-size:0.75rem; color:var(--ink-muted); line-height:1.45; display:flex; flex-direction:column; gap:8px;">
+    <div><strong>Formula:</strong> <span id="explain-formula">—</span></div>
+    <div><strong>Business Meaning:</strong> <span id="explain-meaning">—</span></div>
+    <div><strong>Industry Benchmark:</strong> <span id="explain-benchmark">—</span></div>
+  </div>
+</div>
+
+<script>
+// ── Smooth scroll navigation ──────────────────────────────────────
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Update active nav link
+  document.querySelectorAll('.nav-link-item').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id)) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+// ── Active nav link on scroll ─────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const sections = [
+    'section-overview', 'section-drivers', 'section-segments',
+    'section-cohorts', 'section-predictions', 'section-actions', 'section-portfolio'
+  ];
+  const navH = 80;
+  let current = sections[0];
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - navH - 20) {
+      current = id;
+    }
+  });
+
+  document.querySelectorAll('.nav-link-item').forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    btn.classList.toggle('active', onclick.includes(current));
+  });
+}, { passive: true });
+
+// ── Last updated timestamp ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('nav-last-updated');
+  if (el) {
+    const now = new Date();
+    el.textContent = 'Updated ' + now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+});
+</script>
+
+<script src="js/data.js"></script>
+<script src="js/dashboard-charts.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

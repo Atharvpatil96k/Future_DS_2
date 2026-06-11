@@ -1,0 +1,33 @@
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntuser
+*.user
+
+# Project temporary folders
+notebooks_temp/
+data_temp/
+dashboard_temp/
+
+# Large generated data files (pipeline outputs)
+# Committing large data files is bad practice; they are reproducible by running scripts.
+data/cleaned/
+data/processed/
+data/raw/Telco-Customer-Churn.csv
+
+# Keep only the raw source file in data/
+!data/telco_customer_churn.csv
